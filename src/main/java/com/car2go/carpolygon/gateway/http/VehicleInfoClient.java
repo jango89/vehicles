@@ -1,14 +1,15 @@
-package com.car2go.carpolygon.gateway;
+package com.car2go.carpolygon.gateway.http;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.car2go.carpolygon.json.GeoPolygonResponse;
+import com.car2go.carpolygon.json.VehicleResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.util.List;
-import java.util.function.Predicate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,37 +19,35 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriTemplate;
 
 @Component
-public class GeoPolygonInterface {
+public class VehicleInfoClient {
 
-  @Value("${geo.polygon.json.url}")
+  @Value("${vehicle.info.url}")
   public String url;
+  private final static Logger LOGGER = LoggerFactory.getLogger(VehicleInfoClient.class);
 
   private final RestTemplate restTemplate;
   private final ObjectMapper objectMapper;
 
-  public GeoPolygonInterface(RestTemplate restTemplate,
+  public VehicleInfoClient(RestTemplate restTemplate,
       ObjectMapper objectMapper) {
     this.restTemplate = restTemplate;
     this.objectMapper = objectMapper;
   }
 
-  public List<GeoPolygonResponse> fetch() {
-    URI uri = new UriTemplate(url).expand();
-    return (List<GeoPolygonResponse>) restTemplate
+  public List<VehicleResponse> fetch(String location) {
+    URI uri = new UriTemplate(url.concat("/{location}"))
+        .expand(location);
+    LOGGER.info("Vehicles are retrieved for {} ", location);
+    return (List<VehicleResponse>) restTemplate
         .exchange(uri, GET, new HttpEntity<>(headers()), List.class)
         .getBody()
         .stream()
-        .map(this::getReadValue)
-        .filter(isPoligonActive())
+        .map(this::convert)
         .collect(toList());
   }
 
-  private Predicate isPoligonActive() {
-    return resp -> ((GeoPolygonResponse) resp).isValid();
-  }
-
-  private GeoPolygonResponse getReadValue(Object item) {
-    return objectMapper.convertValue(item, GeoPolygonResponse.class);
+  private VehicleResponse convert(Object item) {
+    return objectMapper.convertValue(item, VehicleResponse.class);
   }
 
   private MultiValueMap<String, String> headers() {
@@ -64,4 +63,5 @@ public class GeoPolygonInterface {
   public void setUrl(String url) {
     this.url = url;
   }
+
 }

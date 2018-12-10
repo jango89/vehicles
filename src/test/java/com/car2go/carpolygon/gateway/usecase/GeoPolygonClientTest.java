@@ -1,7 +1,9 @@
-package com.car2go.carpolygon.gateway;
+package com.car2go.carpolygon.gateway.usecase;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import com.car2go.carpolygon.gateway.http.GeoPolygonClient;
 import com.car2go.carpolygon.json.GeoPolygonResponse;
 import java.util.List;
 import org.junit.Test;
@@ -12,16 +14,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class GeoPolygonInterfaceTest {
+public class GeoPolygonClientTest {
 
   @Autowired
-  private GeoPolygonInterface geoPolygonInterface;
+  private GeoPolygonClient geoPolygonClient;
 
   @Test
   public void givenUrlShouldFetchPolygonDetails() {
-    geoPolygonInterface.setUrl(
-        "https://gist.githubusercontent.com/codeofsumit/6540cdb245bd14c33b486b7981981b7b/raw/73ebda86c32923e203b2a8e61615da3e5f1695a2/polygons.json");
-    final List<GeoPolygonResponse> geometryJson = geoPolygonInterface.fetch();
+    final List<GeoPolygonResponse> geometryJson = geoPolygonClient.fetch();
     assertNotNull(geometryJson);
+    assertTrue(geometryJson.size() > 0);
   }
 }
