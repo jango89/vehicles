@@ -1,7 +1,7 @@
 package com.car2go.carpolygon.usecase;
 
 import com.car2go.carpolygon.domain.GeoPolygon;
-import com.car2go.carpolygon.gateway.GeoPolygonInterface;
+import com.car2go.carpolygon.gateway.http.GeoPolygonClient;
 import com.car2go.carpolygon.json.GeoPolygonResponse;
 import com.car2go.carpolygon.repository.GeoPolygonRepository;
 import java.util.List;
@@ -16,12 +16,12 @@ import org.springframework.stereotype.Component;
 public class SaveGeoPolygon {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SaveGeoPolygon.class);
-  private final GeoPolygonInterface geoPolygonInterface;
+  private final GeoPolygonClient geoPolygonClient;
   private final GeoPolygonRepository geoPolygonRepository;
 
-  public SaveGeoPolygon(GeoPolygonInterface geoPolygonInterface,
+  public SaveGeoPolygon(GeoPolygonClient geoPolygonClient,
       GeoPolygonRepository geoPolygonRepository) {
-    this.geoPolygonInterface = geoPolygonInterface;
+    this.geoPolygonClient = geoPolygonClient;
     this.geoPolygonRepository = geoPolygonRepository;
   }
 
@@ -51,7 +51,7 @@ public class SaveGeoPolygon {
   }
 
   private List<GeoPolygonResponse> fetchFromUrl() {
-    return geoPolygonInterface.fetch();
+    return geoPolygonClient.fetch();
   }
 
 }

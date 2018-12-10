@@ -6,7 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.car2go.carpolygon.domain.GeoPolygon;
-import com.car2go.carpolygon.gateway.GeoPolygonInterface;
+import com.car2go.carpolygon.gateway.http.GeoPolygonClient;
 import com.car2go.carpolygon.json.GeoOptions;
 import com.car2go.carpolygon.json.GeoPolygonResponse;
 import com.car2go.carpolygon.json.GeometryJson;
@@ -27,14 +27,14 @@ public class SaveGeoPolygonTest {
   private SaveGeoPolygon saveGeoPolygon;
 
   @Mock
-  private GeoPolygonInterface geoPolygonInterface;
+  private GeoPolygonClient geoPolygonClient;
 
   @Mock
   private GeoPolygonRepository geoPolygonRepository;
 
   @Test
   public void givenUrlToFetchWhenNoDataFoundShouldSaveGeoPolygonsToDatabase() {
-    when(geoPolygonInterface.fetch()).thenReturn(geoPolygonResponses());
+    when(geoPolygonClient.fetch()).thenReturn(geoPolygonResponses());
     when(geoPolygonRepository.saveAll(any())).thenReturn(geoPolygons());
     saveGeoPolygon.initialize();
     verify(geoPolygonRepository, times(1)).saveAll(any());
