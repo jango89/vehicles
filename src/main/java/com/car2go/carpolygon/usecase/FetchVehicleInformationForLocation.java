@@ -13,14 +13,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FetchVehicleInformation {
+public class FetchVehicleInformationForLocation {
 
-  private final static Logger LOGGER = LoggerFactory.getLogger(FetchVehicleInformation.class);
+  private final static Logger LOGGER = LoggerFactory.getLogger(FetchVehicleInformationForLocation.class);
   private final VehicleInfoClient vehicleInfoClient;
   private final FetchLocationInformation fetchLocationInformation;
   private final VehicleInfoCacheRepository vehicleInfoCacheRepository;
 
-  public FetchVehicleInformation(VehicleInfoClient vehicleInfoClient,
+  public FetchVehicleInformationForLocation(VehicleInfoClient vehicleInfoClient,
       FetchLocationInformation fetchLocationInformation,
       VehicleInfoCacheRepository vehicleInfoCacheRepository) {
     this.vehicleInfoClient = vehicleInfoClient;
