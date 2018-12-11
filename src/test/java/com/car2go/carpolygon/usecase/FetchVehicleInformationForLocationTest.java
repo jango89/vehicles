@@ -23,10 +23,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class FetchVehicleInformationTest {
+public class FetchVehicleInformationForLocationTest {
 
   @InjectMocks
-  private FetchVehicleInformation fetchVehicleInformation;
+  private FetchVehicleInformationForLocation fetchVehicleInformationForLocation;
 
   @Mock
   private VehicleInfoClient vehicleInfoClient;
@@ -39,7 +39,7 @@ public class FetchVehicleInformationTest {
   public void givenLocationNameShouldFetchVehicleInformationFromCache() {
     when(vehicleInfoCacheRepository.findById(any())).thenReturn(vehicleInfo());
     when(fetchLocationInformation.execute(any())).thenReturn(locationInfo().get());
-    final VehicleLocation vehicleLocation = fetchVehicleInformation.execute("Stuttgart");
+    final VehicleLocation vehicleLocation = fetchVehicleInformationForLocation.execute("Stuttgart");
     assertNotNull(vehicleLocation);
     assertNotNull(vehicleLocation.getVehicles());
     verify(vehicleInfoClient, times(0)).fetch(any());
@@ -51,7 +51,7 @@ public class FetchVehicleInformationTest {
     when(fetchLocationInformation.execute(any())).thenReturn(locationInfo().get());
     when(vehicleInfoClient.fetch(any())).thenReturn(vehicleResponse());
     when(vehicleInfoCacheRepository.save(any())).thenReturn(vehicleInfo().get());
-    final VehicleLocation vehicleLocation = fetchVehicleInformation.execute("Stuttgart");
+    final VehicleLocation vehicleLocation = fetchVehicleInformationForLocation.execute("Stuttgart");
     assertNotNull(vehicleLocation);
     assertNotNull(vehicleLocation.getVehicles());
     verify(vehicleInfoClient, times(1)).fetch(any());

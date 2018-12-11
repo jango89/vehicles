@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-@RedisHash(value = "vehicles", timeToLive = 60)
+@RedisHash(value = "vehicles", timeToLive = 30)
 public class VehicleInfo {
 
   @Id

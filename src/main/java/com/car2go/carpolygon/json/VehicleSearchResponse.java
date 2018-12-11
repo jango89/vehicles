@@ -1,8 +1,9 @@
 package com.car2go.carpolygon.json;
 
+import java.util.List;
 import java.util.Objects;
 
-public class VehicleResponse {
+public class VehicleSearchResponse {
 
   private Long id;
   private String vin;
@@ -10,53 +11,44 @@ public class VehicleResponse {
   private String numberPlate;
   private String model;
   private Position position;
+  private List<String> polygonIds;
+
+  public VehicleSearchResponse(VehicleResponse vehicleResponse, List<String> polygonIds) {
+    this.id = vehicleResponse.getId();
+    this.vin = vehicleResponse.getVin();
+    this.locationId = vehicleResponse.getLocationId();
+    this.model = vehicleResponse.getModel();
+    this.position = vehicleResponse.getPosition();
+    this.numberPlate = vehicleResponse.getNumberPlate();
+    this.polygonIds = polygonIds;
+  }
 
   public Long getId() {
     return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public String getVin() {
     return vin;
   }
 
-  public void setVin(String vin) {
-    this.vin = vin;
-  }
-
   public Long getLocationId() {
     return locationId;
-  }
-
-  public void setLocationId(Long locationId) {
-    this.locationId = locationId;
   }
 
   public String getNumberPlate() {
     return numberPlate;
   }
 
-  public void setNumberPlate(String numberPlate) {
-    this.numberPlate = numberPlate;
-  }
-
   public String getModel() {
     return model;
-  }
-
-  public void setModel(String model) {
-    this.model = model;
   }
 
   public Position getPosition() {
     return position;
   }
 
-  public void setPosition(Position position) {
-    this.position = position;
+  public List<String> getPolygonIds() {
+    return polygonIds;
   }
 
   @Override
@@ -67,7 +59,7 @@ public class VehicleResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    VehicleResponse that = (VehicleResponse) o;
+    VehicleSearchResponse that = (VehicleSearchResponse) o;
     return id.equals(that.id);
   }
 
