@@ -5,7 +5,6 @@ import static org.springframework.util.Assert.isTrue;
 
 import java.util.List;
 import org.springframework.data.geo.Point;
-import org.springframework.data.geo.Polygon;
 import org.springframework.data.mongodb.core.geo.GeoJson;
 import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
 import org.springframework.util.CollectionUtils;
@@ -19,6 +18,10 @@ public class SearchRequest {
   private Double longitude;
   private List<Double[]> polygons;
   private String location;
+
+  public SearchRequest(String location) {
+    this.location = location;
+  }
 
   public String getVin() {
     return vin;
@@ -87,11 +90,6 @@ public class SearchRequest {
 
   public String getLocation() {
     return location;
-  }
-
-  public SearchRequest setLocation(String location) {
-    this.location = location;
-    return this;
   }
 
   public boolean isPolygonsPresent() {
