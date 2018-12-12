@@ -6,4 +6,4 @@ WORKDIR /code
 
 EXPOSE 8080 6379 27017
 
-#RUN mvn clean install
+RUN mvn clean install

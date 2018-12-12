@@ -1,6 +1,7 @@
 package com.car2go.carpolygon.integration;
 
 import com.car2go.carpolygon.usecase.SaveGeoPolygon;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
