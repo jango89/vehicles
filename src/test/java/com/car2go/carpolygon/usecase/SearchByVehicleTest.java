@@ -12,7 +12,6 @@ import com.car2go.carpolygon.json.Position;
 import com.car2go.carpolygon.json.SearchRequest;
 import com.car2go.carpolygon.json.VehicleResponse;
 import com.car2go.carpolygon.json.VehicleSearchResponse;
-import com.car2go.carpolygon.repository.GeoPolygonRepository;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -31,11 +31,11 @@ public class SearchByVehicleTest {
   private SearchByVehicle searchByVehicle;
 
   @Mock
-  private GeoPolygonRepository geoPolygonRepository;
+  private MongoTemplate mongoTemplate;
 
   @Test
   public void givenSearchRequestWhenFindingVehicleShouldRespondWithSearchResults() {
-    when(geoPolygonRepository.findByCoordsNear(any(), any())).thenReturn(geoPolygons());
+    when(mongoTemplate.find(any(), any())).thenReturn(geoPolygons());
     final List<VehicleSearchResponse> vehicleSearchResponses = searchByVehicle
         .execute(searchRequest(), vehicleInformation());
     assertNotNull(vehicleSearchResponses);
@@ -44,7 +44,7 @@ public class SearchByVehicleTest {
 
   @Test
   public void givenSearchRequestWithValidModelWhenFindingVehicleShouldRespondWithSearchResults() {
-    when(geoPolygonRepository.findByCoordsNear(any(), any())).thenReturn(geoPolygons());
+    when(mongoTemplate.find(any(), any())).thenReturn(geoPolygons());
     final SearchRequest searchRequest = searchRequest();
     searchRequest.setModel("model");
     final List<VehicleSearchResponse> vehicleSearchResponses = searchByVehicle
@@ -110,8 +110,8 @@ public class SearchByVehicleTest {
     return locationResponse;
   }
 
-  private List<GeoPolygon> geoPolygons() {
-    List<GeoPolygon> geoPolygons = new ArrayList<>();
+  private List<Object> geoPolygons() {
+    List<Object> geoPolygons = new ArrayList<>();
     final GeoJsonPolygon geoJsonPolygon = new GeoJsonPolygon(new Point(1, 2), new Point(1, 2),
         new Point(1, 2), new Point(1, 2));
     GeoPolygon geoPolygon = new GeoPolygon("id", geoJsonPolygon);

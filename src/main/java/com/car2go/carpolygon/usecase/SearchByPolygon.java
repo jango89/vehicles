@@ -18,6 +18,7 @@ import java.util.Set;
 import org.bson.types.ObjectId;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -66,8 +67,7 @@ public class SearchByPolygon {
             .forEach(geoPolygon -> updatePolygonResponse(nonCachedPolygonIdAndPolygonResponse,
                 vehicleLoc, geoPolygon)));
 
-    return nonCachedPolygonIdAndPolygonResponse.size() > 0 ?
-        nonCachedPolygonIdAndPolygonResponse.values() : new LinkedList<>();
+    return new LinkedList<>(nonCachedPolygonIdAndPolygonResponse.values());
   }
 
   private void updatePolygonResponse(Map<String, PolygonSearchResponse> poligonStore,
@@ -109,9 +109,11 @@ public class SearchByPolygon {
 
   private Query nonCachedpolygonsCriteria(
       List<ObjectId> poligonIdsNotFoundInCache, VehicleResponse vehicleResponse) {
+    final GeoJsonPoint geoJsonPoint = new GeoJsonPoint(
+        new Point(vehicleResponse.getPosition().getLongitude(),
+            vehicleResponse.getPosition().getLatitude()));
     return new Query(new Criteria()
-        .near(new Point(vehicleResponse.getPosition().getLongitude(),
-            vehicleResponse.getPosition().getLatitude()))
+        .near(geoJsonPoint)
         .maxDistance(LENGTH_OF_CAR_IN_METERS)
         .andOperator(new Criteria("_id").in(poligonIdsNotFoundInCache)));
   }

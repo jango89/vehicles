@@ -1,5 +1,6 @@
 package com.car2go.carpolygon.domain;
 
+import static java.math.RoundingMode.HALF_UP;
 import static java.util.stream.Collectors.toList;
 
 import com.car2go.carpolygon.json.LocationResponse;
@@ -7,6 +8,7 @@ import com.car2go.carpolygon.json.PolygonSearchResponse;
 import com.car2go.carpolygon.json.SearchRequest;
 import com.car2go.carpolygon.json.VehicleResponse;
 import com.car2go.carpolygon.json.VehicleSearchResponse;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -32,10 +34,6 @@ public class VehicleLocation {
     this.vehicles = vehicles.stream()
         .collect(Collectors.toMap(VehicleResponse::getId, Function.identity()));
     vehiclesNeedsToBeSearched = new HashSet<>(vehicles);
-  }
-
-  public LocationResponse getLocationInfo() {
-    return locationInfo;
   }
 
   public Collection<VehicleResponse> getVehicles() {
@@ -75,16 +73,20 @@ public class VehicleLocation {
   private Predicate<VehicleResponse> vehicleLatitudePredicate(Double latitude) {
     return vehicleResponse -> Objects.isNull(latitude) ?
         vehicleResponse.getPosition().getLatitude() > 0.0D :
-        vehicleResponse.getPosition().getLatitude().equals(latitude);
+        BigDecimal.valueOf(vehicleResponse.getPosition().getLatitude())
+            .setScale(1, HALF_UP)
+            .equals(BigDecimal.valueOf(latitude).setScale(1, HALF_UP));
   }
 
   private Predicate<VehicleResponse> vehicleLongitudePredicate(Double longitude) {
     return vehicleResponse -> Objects.isNull(longitude) ?
         vehicleResponse.getPosition().getLongitude() > 0.0D :
-        vehicleResponse.getPosition().getLongitude().equals(longitude);
+        BigDecimal.valueOf(vehicleResponse.getPosition().getLongitude())
+            .setScale(1, HALF_UP)
+            .equals(BigDecimal.valueOf(longitude).setScale(1, HALF_UP));
   }
 
-  public VehicleSearchResponse updatePoligonIdCache(VehicleSearchResponse vehicleSearchResponse) {
+  public VehicleSearchResponse updatePolygonIdCache(VehicleSearchResponse vehicleSearchResponse) {
     vehicleSearchResponse.getPolygonIds().forEach(polygonId -> {
       if (!polygonIdAndVehiclesCache.containsKey(polygonId)) {
         final LinkedList<VehicleSearchResponse> vehicles = new LinkedList<>();

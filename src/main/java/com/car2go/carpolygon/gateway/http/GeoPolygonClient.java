@@ -39,11 +39,11 @@ public class GeoPolygonClient {
         .getBody()
         .stream()
         .map(this::convert)
-        .filter(isPoligonActive())
+        .filter(isPolygonActive())
         .collect(toList());
   }
 
-  private Predicate isPoligonActive() {
+  private Predicate isPolygonActive() {
     return resp -> ((GeoPolygonResponse) resp).isValid();
   }
 

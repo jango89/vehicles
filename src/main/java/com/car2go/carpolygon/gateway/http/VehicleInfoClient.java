@@ -37,7 +37,7 @@ public class VehicleInfoClient {
   public List<VehicleResponse> fetch(String location) {
     URI uri = new UriTemplate(url.concat("/{location}"))
         .expand(location);
-    LOGGER.info("Vehicles are retrieved for {} ", location);
+    LOGGER.info("Vehicle info is retrieved for {} ", location);
     return (List<VehicleResponse>) restTemplate
         .exchange(uri, GET, new HttpEntity<>(headers()), List.class)
         .getBody()

@@ -16,9 +16,9 @@ public class GeoPolygon {
   private GeoJsonPolygon coords;
 
   @PersistenceConstructor
-  public GeoPolygon(String id, GeoJsonPolygon coordinates) {
+  public GeoPolygon(String id, GeoJsonPolygon coords) {
     this.id = id;
-    this.coords = coordinates;
+    this.coords = coords;
   }
 
   public String getId() {

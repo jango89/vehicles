@@ -16,7 +16,7 @@ public class SwaggerConfiguration {
   public Docket documentation() {
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
-        .apis(RequestHandlerSelectors.basePackage("com.ca2go.carpolygon.controller"))
+        .apis(RequestHandlerSelectors.basePackage("com.car2go.carpolygon"))
         .paths(PathSelectors.any())
         .build().pathMapping("/");
   }

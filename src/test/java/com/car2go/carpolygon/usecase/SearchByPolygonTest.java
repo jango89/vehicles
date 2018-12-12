@@ -45,18 +45,24 @@ public class SearchByPolygonTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void givenSearchRequestWithPolygonsWhenSearchingByCoordsShouldThrowException() {
-    List<Double[]> list = new LinkedList<>();
-    list.add(new Double[]{1D, 2D});
+    List<Double> list = new LinkedList<>();
+    list.add(1D);
+    list.add(1D);
     searchRequest().setPolygons(list);
   }
 
   @Test
   public void givenSearchRequestWithPolygonsWhenSearchingByCoordsShouldGivePolygonSearchResponse() {
-    List<Double[]> list = new LinkedList<>();
-    list.add(new Double[]{1D, 2D});
-    list.add(new Double[]{1D, 2D});
-    list.add(new Double[]{3D, 2D});
-    list.add(new Double[]{1D, 2D});
+    List<Double> list = new LinkedList<>();
+    list.add(1D);
+    list.add(2D);
+    list.add(1D);
+    list.add(2D);
+    list.add(3D);
+    list.add(2D);
+    list.add(1D);
+    list.add(2D);
+
     final SearchRequest searchRequest = searchRequest().setPolygons(list);
     when(mongoTemplate.find(polygonsCriteria(searchRequest), GeoPolygon.class))
         .thenReturn(geoPolygons());

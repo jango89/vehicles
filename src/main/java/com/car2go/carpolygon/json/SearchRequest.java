@@ -3,6 +3,7 @@ package com.car2go.carpolygon.json;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.util.Assert.isTrue;
 
+import java.util.LinkedList;
 import java.util.List;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.geo.GeoJson;
@@ -72,12 +73,42 @@ public class SearchRequest {
     return polygons;
   }
 
-  public SearchRequest setPolygons(List<Double[]> polygons) {
-    this.polygons = polygons;
-    isTrue(polygons.size() > 3, "Should have at-least 4 sets of coordinates");
-    isTrue(polygonsStartAndEndWithSameValue(polygons.get(0), lastValue(polygons)),
-        "Start and End set of polygons should have same value");
+  public SearchRequest setPolygons(List<Double> polygons) {
+    if (!CollectionUtils.isEmpty(polygons)) {
+      List<Double[]> polygonData = createPolygonData(polygons);
+
+      this.polygons = polygonData;
+      isTrue(polygonData.size() > 3, "Should have at-least 4 sets of coordinates");
+      isTrue(polygonsStartAndEndWithSameValue(polygonData.get(0), lastValue(polygonData)),
+          "Start and End set of polygons should have same value");
+    }
     return this;
+  }
+
+  /**
+   * 9.11682,48.740797,9.182748200599177, 48.74465716670039,9.110011,48.740797,9.11682,48.740797
+   * Just categorizing above list of numbers to Geo JSON [[9.11682,48.740797] [9.182748200599177,
+   * 48.74465716670039]...]
+   */
+  private List<Double[]> createPolygonData(List<Double> polygons) {
+    List<Double[]> polygonData = new LinkedList<>();
+    try {
+      Double[] polygon = new Double[2];
+      for (int index = 1; index <= polygons.size(); index++) {
+        if (index % 2 != 0) {
+          polygon = new Double[2];
+          polygon[0] = polygons.get(index - 1);
+        } else {
+          polygon[1] = polygons.get(index - 1);
+        }
+        if (index % 2 == 0) {
+          polygonData.add(polygon);
+        }
+      }
+    } catch (RuntimeException exp) {
+      throw new IllegalArgumentException("Please Recheck the polygons searched");
+    }
+    return polygonData;
   }
 
   private boolean polygonsStartAndEndWithSameValue(Double[] firstArray, Double[] lastArray) {
