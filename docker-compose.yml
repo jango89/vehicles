@@ -15,15 +15,22 @@ services:
     ports:
       - "6379:6379"
 
+  api-coding-challenge:
+    image: car2godeveloper/api-for-coding-challenge
+    ports:
+      - "3000:3000"
+
   car-polygon:
     build: .
     depends_on:
       - mongo
       - redis
+      - api-coding-challenge
     links:
       - mongo
       - redis
+      - api-coding-challenge
     ports:
       - "8080:8080"
-    command: java -jar target/car-polygon-0.0.1-SNAPSHOT.jar
+    command: bash -c "mvn clean install && java -jar target/car-polygon-0.0.1-SNAPSHOT.jar"
     tty: true
