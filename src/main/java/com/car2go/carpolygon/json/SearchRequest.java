@@ -74,14 +74,14 @@ public class SearchRequest {
 
   public SearchRequest setPolygons(List<Double[]> polygons) {
     this.polygons = polygons;
-    isTrue(polygons.size() < 4, "Should have at-least 4 sets of coordinates");
-    isTrue(polygonsNotStartAndEndWithSameValue(polygons.get(0), lastValue(polygons)),
+    isTrue(polygons.size() > 3, "Should have at-least 4 sets of coordinates");
+    isTrue(polygonsStartAndEndWithSameValue(polygons.get(0), lastValue(polygons)),
         "Start and End set of polygons should have same value");
     return this;
   }
 
-  private boolean polygonsNotStartAndEndWithSameValue(Double[] firstArray, Double[] lastArray) {
-    return !firstArray[0].equals(lastArray[0]) || !firstArray[0].equals(lastArray[1]);
+  private boolean polygonsStartAndEndWithSameValue(Double[] firstArray, Double[] lastArray) {
+    return firstArray[0].equals(lastArray[0]) || firstArray[0].equals(lastArray[1]);
   }
 
   private Double[] lastValue(List<Double[]> polygons) {
