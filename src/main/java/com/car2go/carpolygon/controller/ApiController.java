@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class SearchController {
+public class ApiController {
 
   private final SearchByPolygonAndVehicle searchByPolygonAndVehicle;
 
-  public SearchController(SearchByPolygonAndVehicle searchByPolygonAndVehicle) {
+  public ApiController(SearchByPolygonAndVehicle searchByPolygonAndVehicle) {
     this.searchByPolygonAndVehicle = searchByPolygonAndVehicle;
   }
 
