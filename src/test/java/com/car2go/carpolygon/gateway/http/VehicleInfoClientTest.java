@@ -1,9 +1,8 @@
-package com.car2go.carpolygon.gateway.usecase;
+package com.car2go.carpolygon.gateway.http;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.car2go.carpolygon.gateway.http.VehicleInfoClient;
 import com.car2go.carpolygon.json.VehicleResponse;
 import java.util.List;
 import org.junit.Test;

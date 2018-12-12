@@ -14,13 +14,13 @@ public class RestTemplateConfiguration {
   @Bean
   public RestTemplate restTemplate() {
     final RestTemplate restTemplate = new RestTemplate();
-    restTemplate.getMessageConverters().add(new MyGsonHttpMessageConverter());
+    restTemplate.getMessageConverters().add(new CustomGsonHttpMessageConverter());
     return restTemplate;
   }
 
-  class MyGsonHttpMessageConverter extends GsonHttpMessageConverter {
+  class CustomGsonHttpMessageConverter extends GsonHttpMessageConverter {
 
-    public MyGsonHttpMessageConverter() {
+    public CustomGsonHttpMessageConverter() {
       List<MediaType> types = Arrays.asList(
           new MediaType("text", "plain", DEFAULT_CHARSET)
       );
